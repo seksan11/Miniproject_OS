@@ -65,12 +65,12 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane_jobqueue;
     private javax.swing.JTable jTable_RR;
     private javax.swing.JTable jTable_IO_USB;
-    private javax.swing.JTable jTable_Q_Moniter;
+    private javax.swing.JTable jTable_Q_Monitor;
     private javax.swing.JTable jTable_Q_USB;
     private javax.swing.JTable jTable_FCFS;
     private javax.swing.JTable jTable_Terminate;
     private javax.swing.JTable jTable_CPU;
-    private javax.swing.JTable jTable_IO_Moniter;
+    private javax.swing.JTable jTable_IO_Monitor;
     private javax.swing.JTable jTable_job_queue;
     private JTextField jTextField_TimeQuantum;
 
@@ -143,7 +143,7 @@ public class View extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jScrollPane9 = new javax.swing.JScrollPane();
-        jTable_IO_Moniter = new javax.swing.JTable();
+        jTable_IO_Monitor = new javax.swing.JTable();
         jScrollPane10 = new javax.swing.JScrollPane();
         jTable_IO_USB = new javax.swing.JTable();
         jButton_Add_IOM = new javax.swing.JButton();
@@ -153,7 +153,7 @@ public class View extends javax.swing.JFrame {
         jPanel_IOQueue = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jScrollPane11 = new javax.swing.JScrollPane();
-        jTable_Q_Moniter = new javax.swing.JTable();
+        jTable_Q_Monitor = new javax.swing.JTable();
         jLabel10 = new javax.swing.JLabel();
         jScrollPane12 = new javax.swing.JScrollPane();
         jTable_Q_USB = new javax.swing.JTable();
@@ -429,7 +429,7 @@ public class View extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("ROG Fonts", 0, 16)); // NOI18N
         jLabel6.setText("USB");
 
-        jTable_IO_Moniter.setModel(new javax.swing.table.DefaultTableModel(
+        jTable_IO_Monitor.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][]{
                         {null, null, null},
                         {null, null, null},
@@ -440,9 +440,9 @@ public class View extends javax.swing.JFrame {
                         "PID", "Status", "I/O Time"
                 }
         ));
-        jScrollPane9.setViewportView(jTable_IO_Moniter);
-        if (jTable_IO_Moniter.getColumnModel().getColumnCount() > 0) {
-            jTable_IO_Moniter.getColumnModel().getColumn(2).setHeaderValue("I/O Time");
+        jScrollPane9.setViewportView(jTable_IO_Monitor);
+        if (jTable_IO_Monitor.getColumnModel().getColumnCount() > 0) {
+            jTable_IO_Monitor.getColumnModel().getColumn(2).setHeaderValue("I/O Time");
         }
 
         jTable_IO_USB.setModel(new javax.swing.table.DefaultTableModel(
@@ -559,7 +559,7 @@ public class View extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("ROG Fonts", 0, 16)); // NOI18N
         jLabel8.setText("I/O queue");
 
-        jTable_Q_Moniter.setModel(new javax.swing.table.DefaultTableModel(
+        jTable_Q_Monitor.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][]{
                         {null, null, null},
                         {null, null, null},
@@ -570,7 +570,7 @@ public class View extends javax.swing.JFrame {
                         "PID", "Status", "Waiting Time"
                 }
         ));
-        jScrollPane11.setViewportView(jTable_Q_Moniter);
+        jScrollPane11.setViewportView(jTable_Q_Monitor);
 
         jLabel10.setFont(new java.awt.Font("Leelawadee UI", 1, 16)); // NOI18N
         jLabel10.setText("Moniter");
@@ -904,20 +904,23 @@ public class View extends javax.swing.JFrame {
     /*---------------------ADD_IO---------------------------*/
     private void jButton_Add_IOMActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO Add_IOMActionPerformed
-        controller.addMoniterQueue();
+        controller.addMonitorQueue();
 
     }
 
     private void jButton_End_IOMActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO End_IOMActionPerformed
+        controller.endMonitorQueue();
     }
 
     private void jButton_Add_IOUActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO Add_IOUActionPerformed
+        controller.addUsbQueue();
     }
 
     private void jButton_End_IOUActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO End_IOUActionPerformed
+        controller.endUsbQueue();
     }
 
     /*----------------------------------------------------------------------*/
@@ -930,17 +933,23 @@ public class View extends javax.swing.JFrame {
                 jLabel_Time.setText(Integer.toString(clock));
                 //   setEnableButton();
                 //    setStart();
-                controller.tqt(timeQuantum);
-                controller.randomRunning(clock);
-                controller.waitingTime();
-
                 showJob(controller.showJobQueue());
                 showJobFcfs(controller.showFirstComeFirstServedQueue());
                 showJobRr(controller.showRoundRobinQueue());
                 showJobTerminateQueue(controller.showTerminateQueue());
                 showJobCPU(controller.showCPU());
-                showJobMoniter(controller.showMoniter());
-              //  showJobUSB(controller.showIO());
+                showJobMonitor(controller.showMonitor());
+                showJobMonitorQueue(controller.showMonitorQueue());
+                showJobUSB(controller.showUsb());
+                showJobUsbQueue(controller.showUsbQueue());
+
+                controller.tqt(timeQuantum);
+                controller.randomRunning(clock);
+                controller.waitingTime();
+                controller.monitorQueue();
+                controller.usbQueue();
+
+
             }
         };
         mytime.scheduleAtFixedRate(task, 1000, 1000);
@@ -1079,16 +1088,35 @@ public class View extends javax.swing.JFrame {
 
     }
 
-    public void showJobMoniter(String text) {
+    public void showJobMonitor(String text) {
         try {
-            DefaultTableModel model1 = (DefaultTableModel) jTable_Q_Moniter.getModel();
+            DefaultTableModel model1 = (DefaultTableModel) jTable_IO_Monitor.getModel();
 
             int rowCount = model1.getRowCount();
             for (int i = rowCount - 1; i >= 0; i--) {
                 model1.removeRow(i);
             }
             String[] textTable2 = text.split(",");
-            for (int index = 0; index < textTable2.length; index++) {
+            for (int index = 0; index < 1; index++) {
+                String[] textTable1 = textTable2[index].split(" ");
+                model1.addRow(new Object[]{textTable1[0], textTable1[1], textTable1[2]});
+                System.out.println(textTable1[1]);
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+
+        }
+
+    }
+    public void showJobMonitorQueue(String text) {
+        try {
+            DefaultTableModel model1 = (DefaultTableModel) jTable_Q_Monitor.getModel();
+
+            int rowCount = model1.getRowCount();
+            for (int i = rowCount - 1; i >= 0; i--) {
+                model1.removeRow(i);
+            }
+            String[] textTable2 = text.split(",");
+            for (int index = 1; index < textTable2.length; index++) {
                 String[] textTable1 = textTable2[index].split(" ");
                 model1.addRow(new Object[]{textTable1[0], textTable1[1], textTable1[2]});
                 System.out.println(textTable1[1]);
@@ -1099,6 +1127,7 @@ public class View extends javax.swing.JFrame {
 
     }
 
+
     public void showJobUSB(String text) {
         try {
             DefaultTableModel model1 = (DefaultTableModel) jTable_IO_USB.getModel();
@@ -1108,7 +1137,26 @@ public class View extends javax.swing.JFrame {
                 model1.removeRow(i);
             }
             String[] textTable2 = text.split(",");
-            for (int index = 0; index < textTable2.length; index++) {
+            for (int index = 0; index < 1; index++) {
+                String[] textTable1 = textTable2[index].split(" ");
+                model1.addRow(new Object[]{textTable1[0], textTable1[1], textTable1[2]});
+                System.out.println(textTable1[1]);
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+
+        }
+
+    }
+    public void showJobUsbQueue(String text) {
+        try {
+            DefaultTableModel model1 = (DefaultTableModel) jTable_Q_USB.getModel();
+
+            int rowCount = model1.getRowCount();
+            for (int i = rowCount - 1; i >= 0; i--) {
+                model1.removeRow(i);
+            }
+            String[] textTable2 = text.split(",");
+            for (int index = 1; index < textTable2.length; index++) {
                 String[] textTable1 = textTable2[index].split(" ");
                 model1.addRow(new Object[]{textTable1[0], textTable1[1], textTable1[2]});
                 System.out.println(textTable1[1]);

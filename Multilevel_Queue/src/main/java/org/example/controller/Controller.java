@@ -10,7 +10,7 @@ public class Controller {
     ArrayList<Model> terminateQueue = new ArrayList<Model>();
     ArrayList<Model> roundRobinQueue = new ArrayList<Model>();
     ArrayList<Model> firstComeFirstServedQueue = new ArrayList<Model>();
-    ArrayList<Model> moniterQueue = new ArrayList<Model>();
+    ArrayList<Model> monitorQueue = new ArrayList<Model>();
     ArrayList<Model> usbQueue = new ArrayList<Model>();
     int pId = 1;  //ProcessID กําหนดให้เริ่มต้นที่ ProcessID = 1
     int timeQuantum = 0; //ตัวแปลไว้เก็บค่า TimeQuatum จากฝั่ง View
@@ -24,6 +24,8 @@ public class Controller {
     int addCount = 0; // ใช้ นับจำนวน procees ทั้งหมด
     int timeRunning = 0; // ใช้ กำหนดช่วงเวลาทำงานของ process
 
+    int ioTime = 0;  // ใช้ กำหนดช่วงเวลาทำงานของ IO
+
     public Controller() {
     }
 
@@ -35,19 +37,22 @@ public class Controller {
         pId++;
         addCount++;
         jobQueue.add(model);
-        select();
+//        roundRobinQueue.add(model);
+         select();
 
     }
 
-    //เลือกว่าจะให้ Process เข้าไป รอเข้าทำงานที่ FCFS or RR ด้วยการสุ่ม
+    //Method เลือกว่าจะให้ Process เข้าไป รอเข้าทำงานที่ FCFS or RR ด้วยการสุ่ม
     public void select() {
         //TODO select
 
         for (int i = addCount - 1; i < jobQueue.size(); i++) {
             if (jobQueue.get(i).getCountPercent() == 1) {
-                firstComeFirstServedQueue.add(model);
-            } else {
                 roundRobinQueue.add(model);
+                System.out.println(model);
+            } else {
+                firstComeFirstServedQueue.add(model);
+                System.out.println(model);
             }
         }
     }
@@ -117,21 +122,17 @@ public class Controller {
         //TODO randomRunning
         try {
             if (!jobQueue.isEmpty()) {
-                if (timeRunning < 81) {
+                if (timeRunning < 81) {//ถ้า timeRunning อยู่ระหว่าง 0-80 Process ที่อยู่ใน roundRobinQueue จะได้เข้าไปทำงานที่ CPU
                     roundRobinQueue(clock);
                     timeRunning++;
-                    System.out.println("timeRunning = " + timeRunning);
                 }
-                if (timeRunning > 80 && timeRunning < 101) {
+                if (timeRunning > 80 && timeRunning < 101) { //ถ้า timeRunning อยู่ระหว่าง 81-100 Process ที่อยู่ใน firstComeFirstServedQueue จะได้เข้าไปทำงานที่ CPU
                     firstComeFirstServedQueue(clock);
                     timeRunning++;
-                    System.out.println("timeRunning = " + timeRunning);
                 }
-                if (timeRunning > 100) {
+                if (timeRunning > 100) { //ถ้า timeRunning มีค่ามากกว่า 100 จะ reset ค่าให้เป็น 0 เพื่อทำงานในรอบถัดไป
                     timeRunning = 0;
-                    System.out.println("timeRunning = " + timeRunning);
                 }
-                System.out.println("timeRunning total = " + timeRunning);
             }
             System.out.println("timeRunning = " + timeRunning);
 
@@ -180,49 +181,113 @@ public class Controller {
         }
     }
 
-    public void addMoniterQueue() {
+    /////////////////////////////////////////////IO///////////////////////////////////////////////////////////////
+    //Method set การทำงานของ monitor
+    public void monitorQueue() {
         try {
-            for (int i = 0; i < jobQueue.size(); i++) {
-                if (roundRobinQueue.get(0).getStatus() == "Running") {
-                    if (jobQueue.get(i).getStatus() == "Running") {
-                        jobQueue.get(i).setStatus(3);
-                        moniterQueue.add(jobQueue.get(i));
-                        roundRobinQueue.remove(0);
-                        break;
-                    }
-                } else if (firstComeFirstServedQueue.get(0).getStatus() == "Running") {
+            ioTime = monitorQueue.get(0).getIoTime();
+            ioTime++;
+            monitorQueue.get(0).setIoTime(ioTime);
+        } catch (java.lang.IndexOutOfBoundsException e) {
 
-                    if (jobQueue.get(i).getStatus() == "Running") {
-                        jobQueue.get(i).setStatus(3);
-                        moniterQueue.add(jobQueue.get(i));
-                        firstComeFirstServedQueue.remove(0);
-                        break;
-                    }
-                }
+        }
+    }
+
+    //Method Add Process ไปยัง monitorQueue มาจาก roundRobinQueue หรือ firstComeFirstServedQueue
+    public void addMonitorQueue() {
+        try {
+            if (roundRobinQueue.get(0).getStatus() == "Running") {
+                roundRobinQueue.get(0).setStatus(3);
+                monitorQueue.add(roundRobinQueue.get(0));
+                roundRobinQueue.remove(0);
+            } else if (firstComeFirstServedQueue.get(0).getStatus() == "Running") {
+                firstComeFirstServedQueue.get(0).setStatus(3);
+                monitorQueue.add(firstComeFirstServedQueue.get(0));
+                firstComeFirstServedQueue.remove(0);
             }
         } catch (java.lang.IndexOutOfBoundsException e) {
 
         }
+    }
 
+
+    //Method End MonitorQueue กลับไปยัง roundRobinQueue หรือ firstComeFirstServedQueue
+    public void endMonitorQueue() {
+        try {
+            if (monitorQueue.get(0).getCountPercent() == 1) {
+                monitorQueue.get(0).setStatus(1);
+                roundRobinQueue.add(monitorQueue.get(0));
+                monitorQueue.remove(0);
+            } else {
+                monitorQueue.get(0).setStatus(1);
+                firstComeFirstServedQueue.add(monitorQueue.get(0));
+                monitorQueue.remove(0);
+            }
+        } catch (java.lang.IndexOutOfBoundsException e) {
+
+        }
+    }
+    //Method set การทำงานของ USB
+    public void usbQueue() {
+        try {
+            ioTime = usbQueue.get(0).getIoTime();
+            ioTime++;
+            usbQueue.get(0).setIoTime(ioTime);
+        } catch (java.lang.IndexOutOfBoundsException e) {
+
+        }
+    }
+    //Method Add Process ไปยัง usbQueue มาจาก roundRobinQueue หรือ firstComeFirstServedQueue
+    public void addUsbQueue() {
+        try {
+            if (roundRobinQueue.get(0).getStatus() == "Running") {
+                roundRobinQueue.get(0).setStatus(3);
+                usbQueue.add(roundRobinQueue.get(0));
+                roundRobinQueue.remove(0);
+            } else if (firstComeFirstServedQueue.get(0).getStatus() == "Running") {
+                firstComeFirstServedQueue.get(0).setStatus(3);
+                usbQueue.add(firstComeFirstServedQueue.get(0));
+                firstComeFirstServedQueue.remove(0);
+            }
+        } catch (java.lang.IndexOutOfBoundsException e) {
+
+        }
+    }
+
+    //Method End usbQueue กลับไปยัง roundRobinQueue หรือ firstComeFirstServedQueue
+    public void endUsbQueue() {
+        try {
+            if (usbQueue.get(0).getCountPercent() == 1) {
+                usbQueue.get(0).setStatus(1);
+                roundRobinQueue.add(usbQueue.get(0));
+                usbQueue.remove(0);
+            } else {
+                usbQueue.get(0).setStatus(1);
+                firstComeFirstServedQueue.add(usbQueue.get(0));
+                usbQueue.remove(0);
+            }
+        } catch (java.lang.IndexOutOfBoundsException e) {
+
+        }
     }
 
     ////////////////////////////////////////Show////////////////////////////////////////////////////////////////////////////
     //Method สำหรับ set ค่าเริ่มต้นให้กับ index ฝั่ง view
     public int setIndexRr() {
         int index = 0;
-        for (int i = 0; i < roundRobinQueue.size(); i++) {
+        if (!roundRobinQueue.isEmpty())
             if (roundRobinQueue.get(0).getStatus() == "Running") {
                 index = 1;
             } else {
                 index = 0;
             }
-        }
+
         return index;
     }
 
     public int setIndexFcfs() {
         int index = 0;
-        for (int i = 0; i < firstComeFirstServedQueue.size(); i++) {
+        if (!firstComeFirstServedQueue.isEmpty()) {
             if (firstComeFirstServedQueue.get(0).getStatus() == "Running") {
                 index = 1;
             } else {
@@ -297,13 +362,45 @@ public class Controller {
         return text;
     }
 
-    public String showMoniter() {
+    public String showMonitor() {
         String text = "";
-        for (int index = 0; index < moniterQueue.size(); index++) {
-                text = text + moniterQueue.get(index).getProcessID() + " ";
-                text = text + moniterQueue.get(index).getStatus() + " ";
-                text = text + moniterQueue.get(index).getIoTime() + " ";
-                text = text + ",";
+        for (int index = 0; index < monitorQueue.size(); index++) {
+            text = text + monitorQueue.get(0).getProcessID() + " ";
+            text = text + monitorQueue.get(0).getStatus() + " ";
+            text = text + monitorQueue.get(0).getIoTime() + " ";
+            text = text + ",";
+        }
+        return text;
+    }
+
+    public String showMonitorQueue() {
+        String text = "";
+        for (int index = 0; index < monitorQueue.size(); index++) {
+            text = text + monitorQueue.get(index).getProcessID() + " ";
+            text = text + monitorQueue.get(index).getStatus() + " ";
+            text = text + monitorQueue.get(index).getWaitingTime() + " ";
+            text = text + ",";
+        }
+        return text;
+    }
+    public String showUsb() {
+        String text = "";
+        for (int index = 0; index < usbQueue.size(); index++) {
+            text = text + usbQueue.get(0).getProcessID() + " ";
+            text = text + usbQueue.get(0).getStatus() + " ";
+            text = text + usbQueue.get(0).getIoTime() + " ";
+            text = text + ",";
+        }
+        return text;
+    }
+
+    public String showUsbQueue() {
+        String text = "";
+        for (int index = 0; index < usbQueue.size(); index++) {
+            text = text + usbQueue.get(index).getProcessID() + " ";
+            text = text + usbQueue.get(index).getStatus() + " ";
+            text = text + usbQueue.get(index).getWaitingTime() + " ";
+            text = text + ",";
         }
         return text;
     }

@@ -864,8 +864,7 @@ public class View extends javax.swing.JFrame {
                 jLabelClockTime.setText(Integer.toString(clock));
                 jLabelTqTime.setText(Integer.toString(timeQuantum));
               //  jLabelTotalProcess.setText(Integer.toString(timeQuantum));
-                //   setEnableButton();
-                //    setStart();
+
                 showJob(controller.showJobQueue());
                 showJobFcfs(controller.showFirstComeFirstServedQueue());
                 showJobRr(controller.showRoundRobinQueue());
@@ -1029,7 +1028,6 @@ public class View extends javax.swing.JFrame {
     public void showJobUSB(String text) {
         try {
             DefaultTableModel model1 = (DefaultTableModel) jTableUsb.getModel();
-
             int rowCount = model1.getRowCount();
             for (int i = rowCount - 1; i >= 0; i--) {
                 model1.removeRow(i);

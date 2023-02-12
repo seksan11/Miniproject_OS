@@ -51,7 +51,7 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelMultilevelQueue;
     private javax.swing.JLabel jLabelProcessTotal;
     private javax.swing.JLabel jLabelTerminate;
-    private javax.swing.JLabel jLabelTrunaroundMs;
+    private javax.swing.JLabel jLabelTurnaroundMs;
     private javax.swing.JLabel jLabelTurnaround;
     private javax.swing.JPanel jPanelAddEndIo;
     private javax.swing.JPanel jPanelAllButton;
@@ -90,7 +90,7 @@ public class View extends javax.swing.JFrame {
         jLabelClockMs = new javax.swing.JLabel();
         jLabelAvgWaitingTime = new javax.swing.JLabel();
         jLabelTimeTurnaround = new javax.swing.JLabel();
-        jLabelTrunaroundMs = new javax.swing.JLabel();
+        jLabelTurnaroundMs = new javax.swing.JLabel();
         jLabelTurnaround = new javax.swing.JLabel();
         jLabelAvgTime = new javax.swing.JLabel();
         jLabelAvgMs = new javax.swing.JLabel();
@@ -165,13 +165,13 @@ public class View extends javax.swing.JFrame {
         jLabelTimeTurnaround.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelTimeTurnaround.setText("-");
 
-        jLabelTrunaroundMs.setFont(new java.awt.Font("Leelawadee UI", 1, 16)); // NOI18N
-        jLabelTrunaroundMs.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelTrunaroundMs.setText("ms");
+        jLabelTurnaroundMs.setFont(new java.awt.Font("Leelawadee UI", 1, 16)); // NOI18N
+        jLabelTurnaroundMs.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelTurnaroundMs.setText("ms");
 
         jLabelTurnaround.setFont(new java.awt.Font("Leelawadee UI", 1, 16)); // NOI18N
         jLabelTurnaround.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelTurnaround.setText("Turnaround Time");
+        jLabelTurnaround.setText("AVG Turnaround Time");
 
         jLabelAvgTime.setFont(new java.awt.Font("Leelawadee UI", 1, 16)); // NOI18N
         jLabelAvgTime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -193,7 +193,7 @@ public class View extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabelClockMs, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(32, 32, 32)
-                                .addComponent(jLabelAvgWaitingTime, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabelAvgWaitingTime, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 //TODO a
                                 .addComponent(jLabelAvgTime, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -202,9 +202,9 @@ public class View extends javax.swing.JFrame {
                                 .addGap(32, 32, 32)
                                 .addComponent(jLabelTurnaround)
                                 .addGap(18, 18, 18)
-                                .addComponent(jLabelTimeTurnaround, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabelTimeTurnaround, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jLabelTrunaroundMs, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabelTurnaroundMs, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel_AllTimeLayout.setVerticalGroup(
                 jPanel_AllTimeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -216,7 +216,7 @@ public class View extends javax.swing.JFrame {
                                         .addComponent(jLabelClockMs)
                                         .addComponent(jLabelAvgWaitingTime)
                                         .addComponent(jLabelTimeTurnaround)
-                                        .addComponent(jLabelTrunaroundMs)
+                                        .addComponent(jLabelTurnaroundMs)
                                         .addComponent(jLabelTurnaround)
                                         .addComponent(jLabelAvgTime)
                                         .addComponent(jLabelAvgMs))
@@ -680,7 +680,7 @@ public class View extends javax.swing.JFrame {
 
                 },
                 new String [] {
-                        "PID", "Status" ,"Waiting Time"
+                        "PID", "Status" ,"Waiting Time" ,"Turnaround Time"
                 }
         ));
         jScrollPaneTerminate.setViewportView(jTableTerminate);
@@ -813,7 +813,7 @@ public class View extends javax.swing.JFrame {
 
     private void jButtonEndTaskActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO :EndTaskActionPerformed
-        controller.removeQueue();
+        controller.removeQueue(clock);
     }
 
     private void jButtonStartActionPerformed(java.awt.event.ActionEvent evt) {
@@ -859,7 +859,7 @@ public class View extends javax.swing.JFrame {
                 jLabelTqTime.setText(Integer.toString(timeQuantum));
                 jLabelTotalProcess.setText(Integer.toString(controller.getCountProcess()));
                 jLabelAvgTime.setText(controller.getAvgWaitingTime());
-//                jLabelTimeTurnaround.setText(Integer.toString(controller.getTimeRunning()));
+                jLabelTimeTurnaround.setText(controller.getAvgTurnaroundTime());
                 System.out.println(controller.getAvgWaitingTime());
 
                 showJob(controller.showJobQueue());
@@ -953,7 +953,7 @@ public class View extends javax.swing.JFrame {
             String[] textTable2 = text.split(",");
             for (int index = 0; index < textTable2.length; index++) {
                 String[] textTable1 = textTable2[index].split(" ");
-                model1.addRow(new Object[]{textTable1[0], textTable1[1], textTable1[2]});
+                model1.addRow(new Object[]{textTable1[0], textTable1[1], textTable1[2], textTable1[3]});
                 System.out.println(textTable1[1]);
             }
         } catch (ArrayIndexOutOfBoundsException e) {

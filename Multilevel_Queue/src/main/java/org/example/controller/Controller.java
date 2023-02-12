@@ -25,6 +25,7 @@ public class Controller {
     int timeRunning = 0; // ใช้ กำหนดช่วงเวลาทำงานของ process
     int ioTime = 0;  // ใช้ กำหนดช่วงเวลาทำงานของ IO
     double avgWaitingTime = 0;
+    double avgTurnaroundTime = 0;
 
     public Controller() {
     }
@@ -33,7 +34,7 @@ public class Controller {
     //method ปุ่ม addProcess คือมี paramiter อยู่ 2 ตัว รับมาจากฝั่ง View คือตัวแปล clock timeQuantum Method นี้จะถูกนําไปเรียกใช้ในฝั่ง View
     public void addProcess(int clock, int timeQuantum) {
         memory = (int) (Math.random() * (284) + 2);
-        model = new Model(pId, 0, clock, 0, 0, timeQuantum, 0, memory);
+        model = new Model(pId, 0, clock, 0, 0, timeQuantum, 0, memory, 0);
         pId++;
         countProcess++;
         jobQueue.add(model);
@@ -65,6 +66,7 @@ public class Controller {
         countProcess = 0;
         avgWaitingTime = 0;
         pId = 1;
+        avgTurnaroundTime = 0;
     }
 
     ////////////////////////////////////////process////////////////////////////////////////////////////////////////////////////
@@ -158,13 +160,15 @@ public class Controller {
     }
 
     // Method removeQueue จะทำการลบ Process เมื่อมีการกดปุุม End Task
-    public void removeQueue() {
+    public void removeQueue(int clock) {
         try {
             for (int i = 0; i < jobQueue.size(); i++) { //Loop ถ้า i = 0 เช็คว่า i < jobQueue.size ก็จะเพื่มค่า i ครั้งละ 1
                 if (!roundRobinQueue.isEmpty()) {
                     if (roundRobinQueue.get(0).getStatus() == "Running") {
                         if (roundRobinQueue.get(0) == jobQueue.get(i)) { // ถ้า roundRobinQueue ตําแหน่งที่ 0 เท่ากับ jobQueue ตําแหน่งที่ i
                             jobQueue.get(i).setStatus(4);  // ก็จะเซ็ตค่าเป็น Terminate
+                            jobQueue.get(i).setTurnaroundTime(clock);
+                            avgTurnaroundTime(jobQueue.get(i).getTurnaroundTime());
                             terminateQueue.add(jobQueue.get(i)); //เซ็ตค่า terminateQueue ตาม  jobQueue ตําแหน่งที่ i
                             avgWaitingTime(jobQueue.get(i).getWaitingTime());
                             jobQueue.remove(i);// ลบ  jobQueue ตําแหน่งที่ i
@@ -178,6 +182,8 @@ public class Controller {
                     if (firstComeFirstServedQueue.get(0).getStatus() == "Running") {
                         if (firstComeFirstServedQueue.get(0) == jobQueue.get(i)) {
                             jobQueue.get(i).setStatus(4);
+                            jobQueue.get(i).setTurnaroundTime(clock);
+                            avgTurnaroundTime(jobQueue.get(i).getTurnaroundTime());
                             terminateQueue.add(jobQueue.get(i));
                             avgWaitingTime(jobQueue.get(i).getWaitingTime());
                             jobQueue.remove(i);
@@ -204,8 +210,8 @@ public class Controller {
         }
     }
 
-    public void avgWaitingTime(int avgWaitingTime) {
-        this.avgWaitingTime = this.avgWaitingTime + avgWaitingTime;
+    public void avgWaitingTime(int waitingTime) {
+        this.avgWaitingTime = this.avgWaitingTime + waitingTime;
     }
 
     public String getAvgWaitingTime() {
@@ -213,6 +219,17 @@ public class Controller {
             return "0";
         } else
             return String.format("%.2f", avgWaitingTime / terminateQueue.size());
+    }
+
+    public void avgTurnaroundTime(int turnaroundTime) {
+        this.avgTurnaroundTime = this.avgTurnaroundTime + turnaroundTime;
+    }
+
+    public String getAvgTurnaroundTime() {
+        if (terminateQueue.isEmpty()) {
+            return "0";
+        } else
+            return String.format("%.2f", avgTurnaroundTime / terminateQueue.size());
     }
 
     /////////////////////////////////////////////IO///////////////////////////////////////////////////////////////
@@ -426,6 +443,7 @@ public class Controller {
             text = text + terminateQueue.get(index).getProcessID() + " ";
             text = text + terminateQueue.get(index).getStatus() + " ";
             text = text + terminateQueue.get(index).getWaitingTime() + " ";
+            text = text + terminateQueue.get(index).getTurnaroundTime() + " ";
             text = text + ",";
         }
         return text;

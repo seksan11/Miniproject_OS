@@ -15,8 +15,9 @@ public class Model {
     private int timeQuantum;
     private int index;
     private int memory;
+    private int turnaroundTime;
 
-    public Model(int processID, int index, int arrivalTime, int waitingTime, int ioTime, int timeQuantum, int burstTime, int memory) {
+    public Model(int processID, int index, int arrivalTime, int waitingTime, int ioTime, int timeQuantum, int burstTime, int memory,int turnaroundTime) {
         this.processID = processID;
         this.arrivalTime = arrivalTime;
         this.waitingTime = waitingTime;
@@ -26,6 +27,7 @@ public class Model {
         this.burstTime = burstTime;
         this.index = index;
         this.memory = memory;
+        this.turnaroundTime = turnaroundTime;
     }
 
     public Model() {

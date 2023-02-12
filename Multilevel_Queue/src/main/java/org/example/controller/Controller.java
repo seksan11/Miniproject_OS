@@ -45,7 +45,7 @@ public class Controller {
     public void select() {
         //TODO select
         for (int i = countProcess - 1; i < jobQueue.size(); i++) {
-            if (jobQueue.get(i).getCountPercent() == 1) {
+            if (jobQueue.get(i).getCountPercent() == 0) {
                 roundRobinQueue.add(model);
                 System.out.println(model);
             } else {
@@ -85,7 +85,6 @@ public class Controller {
         } catch (java.lang.IndexOutOfBoundsException e) {
 
         }
-
     }
 
     // Method roundRobinQueue จะทำการกำหนดค่าต่างๆ การทํางานต่างๆ ในกรณีที่เข้าไปใช้งาน CPU
@@ -116,7 +115,6 @@ public class Controller {
         } catch (java.lang.IndexOutOfBoundsException e) {
 
         }
-
     }
 
     public void tqt(int qT) {
@@ -158,6 +156,7 @@ public class Controller {
 
         }
     }
+
     // Method removeQueue จะทำการลบ Process เมื่อมีการกดปุุม End Task
     public void removeQueue() {
         try {
@@ -260,7 +259,7 @@ public class Controller {
     //Method End MonitorQueue กลับไปยัง roundRobinQueue หรือ firstComeFirstServedQueue
     public void endMonitorQueue() {
         try {
-            if (monitorQueue.get(0).getCountPercent() == 1) {
+            if (monitorQueue.get(0).getCountPercent() == 0) {
                 monitorQueue.get(0).setStatus(1);
                 roundRobinQueue.add(monitorQueue.get(0));
                 monitorQueue.remove(0);
@@ -328,7 +327,7 @@ public class Controller {
     //Method End usbQueue กลับไปยัง roundRobinQueue หรือ firstComeFirstServedQueue
     public void endUsbQueue() {
         try {
-            if (usbQueue.get(0).getCountPercent() == 1) {
+            if (usbQueue.get(0).getCountPercent() == 0) {
                 usbQueue.get(0).setStatus(1);
                 roundRobinQueue.add(usbQueue.get(0));
                 usbQueue.remove(0);
@@ -438,6 +437,7 @@ public class Controller {
             if (jobQueue.get(index).getStatus() == "Running") {
                 text = text + jobQueue.get(index).getProcessID() + " ";
                 text = text + jobQueue.get(index).getStatus() + " ";
+                text = text + (jobQueue.get(index).getCountPercent() + 1) + " ";
                 text = text + ",";
             }
 

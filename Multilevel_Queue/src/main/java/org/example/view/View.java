@@ -517,7 +517,7 @@ public class View extends javax.swing.JFrame {
 
                 },
                 new String [] {
-                        "PID", "Status"
+                        "PID", "Status" ,"Queue"
                 }
         ));
         jScrollPanePCpu.setViewportView(jTableCpu);
@@ -973,7 +973,7 @@ public class View extends javax.swing.JFrame {
             String[] textTable2 = text.split(",");
             for (int index = 0; index < textTable2.length; index++) {
                 String[] textTable1 = textTable2[index].split(" ");
-                model1.addRow(new Object[]{textTable1[0], textTable1[1]});
+                model1.addRow(new Object[]{textTable1[0], textTable1[1],textTable1[2]});
                 System.out.println(textTable1[1]);
             }
         } catch (ArrayIndexOutOfBoundsException e) {

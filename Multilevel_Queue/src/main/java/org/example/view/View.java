@@ -3,7 +3,6 @@ package org.example.view;
 import org.example.controller.Controller;
 import org.example.model.Model;
 
-import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -152,7 +151,7 @@ public class View extends javax.swing.JFrame {
 
         jLabelClockTime.setFont(new java.awt.Font("Leelawadee UI", 1, 16)); // NOI18N
         jLabelClockTime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelClockTime.setText("--");
+        jLabelClockTime.setText("-");
 
         jLabelClockMs.setFont(new java.awt.Font("Leelawadee UI", 1, 16)); // NOI18N
         jLabelClockMs.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -164,7 +163,7 @@ public class View extends javax.swing.JFrame {
 
         jLabelTimeTurnaround.setFont(new java.awt.Font("Leelawadee UI", 1, 16)); // NOI18N
         jLabelTimeTurnaround.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelTimeTurnaround.setText("--");
+        jLabelTimeTurnaround.setText("-");
 
         jLabelTrunaroundMs.setFont(new java.awt.Font("Leelawadee UI", 1, 16)); // NOI18N
         jLabelTrunaroundMs.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -176,7 +175,7 @@ public class View extends javax.swing.JFrame {
 
         jLabelAvgTime.setFont(new java.awt.Font("Leelawadee UI", 1, 16)); // NOI18N
         jLabelAvgTime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelAvgTime.setText("--");
+        jLabelAvgTime.setText("-");
 
         jLabelAvgMs.setFont(new java.awt.Font("Leelawadee UI", 1, 16)); // NOI18N
         jLabelAvgMs.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -196,9 +195,10 @@ public class View extends javax.swing.JFrame {
                                 .addGap(32, 32, 32)
                                 .addComponent(jLabelAvgWaitingTime, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabelAvgTime, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                //TODO a
+                                .addComponent(jLabelAvgTime, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabelAvgMs, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabelAvgMs, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(32, 32, 32)
                                 .addComponent(jLabelTurnaround)
                                 .addGap(18, 18, 18)
@@ -382,7 +382,7 @@ public class View extends javax.swing.JFrame {
 
         jLabelTqTime.setFont(new java.awt.Font("Leelawadee UI", 1, 20)); // NOI18N
         jLabelTqTime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelTqTime.setText("--");
+        jLabelTqTime.setText("-");
 
         javax.swing.GroupLayout jPanel_AllButtonLayout = new javax.swing.GroupLayout(jPanelAllButton);
         jPanelAllButton.setLayout(jPanel_AllButtonLayout);
@@ -680,7 +680,7 @@ public class View extends javax.swing.JFrame {
 
                 },
                 new String [] {
-                        "PID", "Status"
+                        "PID", "Status" ,"Waiting Time"
                 }
         ));
         jScrollPaneTerminate.setViewportView(jTableTerminate);
@@ -721,7 +721,7 @@ public class View extends javax.swing.JFrame {
         jLabelTotalProcess.setBackground(new java.awt.Color(204, 204, 204));
         jLabelTotalProcess.setFont(new java.awt.Font("Leelawadee UI", 1, 18)); // NOI18N
         jLabelTotalProcess.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelTotalProcess.setText("--");
+        jLabelTotalProcess.setText("-");
 
         javax.swing.GroupLayout jPanel_showSysLayout = new javax.swing.GroupLayout(jPanelShowSys);
         jPanelShowSys.setLayout(jPanel_showSysLayout);
@@ -804,17 +804,11 @@ public class View extends javax.swing.JFrame {
     private void jButtonAddProcessActionPerformed(java.awt.event.ActionEvent evt) {
         //TODO addPrpcess
         controller.addProcess(clock, timeQuantum);
-        //  showJob(controller.showJobQueue());
-//        if (controller.getCountPercent() == 1) {
-//            showJobFcfs(controller.showFirstComeFirstServedQueue());
-//        } else {
-//            showJobRr(controller.showRoundRobinQueue());
-//        }
     }
 
     private void jButtonResetActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO:resetActionPerformed
-        System.exit(0);
+        controller.reset();
     }
 
     private void jButtonEndTaskActionPerformed(java.awt.event.ActionEvent evt) {
@@ -863,7 +857,10 @@ public class View extends javax.swing.JFrame {
                 clock++;
                 jLabelClockTime.setText(Integer.toString(clock));
                 jLabelTqTime.setText(Integer.toString(timeQuantum));
-              //  jLabelTotalProcess.setText(Integer.toString(timeQuantum));
+                jLabelTotalProcess.setText(Integer.toString(controller.getCountProcess()));
+                jLabelAvgTime.setText(controller.getAvgWaitingTime());
+//                jLabelTimeTurnaround.setText(Integer.toString(controller.getTimeRunning()));
+                System.out.println(controller.getAvgWaitingTime());
 
                 showJob(controller.showJobQueue());
                 showJobFcfs(controller.showFirstComeFirstServedQueue());
@@ -878,10 +875,10 @@ public class View extends javax.swing.JFrame {
                 controller.tqt(timeQuantum);
                 controller.randomRunning(clock);
                 controller.waitingTime();
+                controller.waitingTimeMonitorQueue();
+                controller.waitingTimeUsbQueue();
                 controller.monitorQueue();
                 controller.usbQueue();
-
-
             }
         };
         mytime.scheduleAtFixedRate(task, 1000, 1000);
@@ -956,7 +953,7 @@ public class View extends javax.swing.JFrame {
             String[] textTable2 = text.split(",");
             for (int index = 0; index < textTable2.length; index++) {
                 String[] textTable1 = textTable2[index].split(" ");
-                model1.addRow(new Object[]{textTable1[0], textTable1[1]});
+                model1.addRow(new Object[]{textTable1[0], textTable1[1], textTable1[2]});
                 System.out.println(textTable1[1]);
             }
         } catch (ArrayIndexOutOfBoundsException e) {

@@ -21,10 +21,10 @@ public class Controller {
     int memory;
 
     int jQ = 0;  // ใช้ แทน burstTime ใน  firstComeFirstServedQueue
-    int addCount = 0; // ใช้ นับจำนวน procees ทั้งหมด
+    int countProcess = 0; // ใช้ นับจำนวน procees ทั้งหมด
     int timeRunning = 0; // ใช้ กำหนดช่วงเวลาทำงานของ process
-
     int ioTime = 0;  // ใช้ กำหนดช่วงเวลาทำงานของ IO
+    double avgWaitingTime = 0;
 
     public Controller() {
     }
@@ -35,10 +35,8 @@ public class Controller {
         memory = (int) (Math.random() * (284) + 2);
         model = new Model(pId, 0, clock, 0, 0, timeQuantum, 0, memory);
         pId++;
-        addCount++;
+        countProcess++;
         jobQueue.add(model);
-//        roundRobinQueue.add(model);
-//        firstComeFirstServedQueue.add(model);
         select();
 
     }
@@ -46,8 +44,7 @@ public class Controller {
     //Method เลือกว่าจะให้ Process เข้าไป รอเข้าทำงานที่ FCFS or RR ด้วยการสุ่ม
     public void select() {
         //TODO select
-
-        for (int i = addCount - 1; i < jobQueue.size(); i++) {
+        for (int i = countProcess - 1; i < jobQueue.size(); i++) {
             if (jobQueue.get(i).getCountPercent() == 1) {
                 roundRobinQueue.add(model);
                 System.out.println(model);
@@ -56,6 +53,18 @@ public class Controller {
                 System.out.println(model);
             }
         }
+    }
+
+    public void reset() {
+        jobQueue.removeAll(jobQueue);
+        roundRobinQueue.removeAll(roundRobinQueue);
+        firstComeFirstServedQueue.removeAll(firstComeFirstServedQueue);
+        terminateQueue.removeAll(terminateQueue);
+        monitorQueue.removeAll(monitorQueue);
+        usbQueue.removeAll(usbQueue);
+        countProcess = 0;
+        avgWaitingTime = 0;
+        pId = 1;
     }
 
     ////////////////////////////////////////process////////////////////////////////////////////////////////////////////////////
@@ -118,6 +127,10 @@ public class Controller {
         timeQueam = q;
     }
 
+    public int getCountProcess() {
+        return countProcess;
+    }
+
     // Method สำหรับกำหนดให้ process ไหนจะได้้เข้าไปทำงานใน CPU
     public void randomRunning(int clock) {
         //TODO randomRunning
@@ -131,12 +144,10 @@ public class Controller {
                     if (timeRunning < 81) {//ถ้า timeRunning อยู่ระหว่าง 0-80 Process ที่อยู่ใน roundRobinQueue จะได้เข้าไปทำงานที่ CPU
                         roundRobinQueue(clock);
                         timeRunning++;
-                    }
-                    if (timeRunning > 80 && timeRunning < 101) { //ถ้า timeRunning อยู่ระหว่าง 81-100 Process ที่อยู่ใน firstComeFirstServedQueue จะได้เข้าไปทำงานที่ CPU
+                    } else if (timeRunning > 80 && timeRunning < 101) { //ถ้า timeRunning อยู่ระหว่าง 81-100 Process ที่อยู่ใน firstComeFirstServedQueue จะได้เข้าไปทำงานที่ CPU
                         firstComeFirstServedQueue(clock);
                         timeRunning++;
-                    }
-                    if (timeRunning > 100) { //ถ้า timeRunning มีค่ามากกว่า 100 จะ reset ค่าให้เป็น 0 เพื่อทำงานในรอบถัดไป
+                    } else if (timeRunning > 100) { //ถ้า timeRunning มีค่ามากกว่า 100 จะ reset ค่าให้เป็น 0 เพื่อทำงานในรอบถัดไป
                         timeRunning = 0;
                     }
                 }
@@ -147,61 +158,37 @@ public class Controller {
 
         }
     }
-
     // Method removeQueue จะทำการลบ Process เมื่อมีการกดปุุม End Task
     public void removeQueue() {
         try {
-
-//            for (int i = 0; i < jobQueue.size(); i++) { //Loop ถ้า i = 0 เช็คว่า i < jobQueue.size ก็จะเพื่มค่า i ครั้งละ 1
-//                if (!roundRobinQueue.isEmpty()) {
-//                    if (roundRobinQueue.get(0).getStatus() == "Running") {
-//                        if (roundRobinQueue.get(0) == jobQueue.get(i)) { // ถ้า roundRobinQueue ตําแหน่งที่ 0 เท่ากับ jobQueue ตําแหน่งที่ i
-//                            jobQueue.get(i).setStatus(4);  // ก็จะเซ็ตค่าเป็น Terminate
-//                            terminateQueue.add(jobQueue.get(i)); //เซ็ตค่า terminateQueue ตาม  jobQueue ตําแหน่งที่ i
-//                            jobQueue.remove(i);// ลบ  jobQueue ตําแหน่งที่ i
-//                            roundRobinQueue.remove(0); // ลบ  roundRobinQueue ตําแหน่งที่ 0
-//                            addCount--; //ลดค่า addCount ลงทีละ 1
-//                            break;
-//                        }
-//                    }
-//                }
-//                if (!firstComeFirstServedQueue.isEmpty()) {
-//                    if (firstComeFirstServedQueue.get(0).getStatus() == "Running") {
-//                        if (firstComeFirstServedQueue.get(0) == jobQueue.get(i)) {
-//                            jobQueue.get(i).setStatus(4);
-//                            terminateQueue.add(jobQueue.get(i));
-//                            jobQueue.remove(i);
-//                            firstComeFirstServedQueue.remove(0);
-//                            addCount--;
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
-
-            if (!roundRobinQueue.isEmpty()) {
-                if (roundRobinQueue.get(0).getStatus() == "Running") {
-                    for (int i = 0; i < jobQueue.size(); i++) {
-                        if (jobQueue.get(i) == roundRobinQueue.get(0)) {
-                            jobQueue.remove(i);
+            for (int i = 0; i < jobQueue.size(); i++) { //Loop ถ้า i = 0 เช็คว่า i < jobQueue.size ก็จะเพื่มค่า i ครั้งละ 1
+                if (!roundRobinQueue.isEmpty()) {
+                    if (roundRobinQueue.get(0).getStatus() == "Running") {
+                        if (roundRobinQueue.get(0) == jobQueue.get(i)) { // ถ้า roundRobinQueue ตําแหน่งที่ 0 เท่ากับ jobQueue ตําแหน่งที่ i
+                            jobQueue.get(i).setStatus(4);  // ก็จะเซ็ตค่าเป็น Terminate
+                            terminateQueue.add(jobQueue.get(i)); //เซ็ตค่า terminateQueue ตาม  jobQueue ตําแหน่งที่ i
+                            avgWaitingTime(jobQueue.get(i).getWaitingTime());
+                            jobQueue.remove(i);// ลบ  jobQueue ตําแหน่งที่ i
+                            roundRobinQueue.remove(0); // ลบ  roundRobinQueue ตําแหน่งที่ 0
+                            countProcess--; //ลดค่า addCount ลงทีละ 1
+                            break;
                         }
                     }
-                    roundRobinQueue.get(0).setStatus(4);  // ก็จะเซ็ตค่าเป็น Terminate
-                    terminateQueue.add(roundRobinQueue.get(0)); //เซ็ตค่า terminateQueue ตาม  jobQueue ตําแหน่งที่ i
-                    roundRobinQueue.remove(0); // ลบ  roundRobinQueue ตําแหน่งที่ 0
-                    addCount--; //ลดค่า addCount ลงทีละ 1
+                }
+                if (!firstComeFirstServedQueue.isEmpty()) {
+                    if (firstComeFirstServedQueue.get(0).getStatus() == "Running") {
+                        if (firstComeFirstServedQueue.get(0) == jobQueue.get(i)) {
+                            jobQueue.get(i).setStatus(4);
+                            terminateQueue.add(jobQueue.get(i));
+                            avgWaitingTime(jobQueue.get(i).getWaitingTime());
+                            jobQueue.remove(i);
+                            firstComeFirstServedQueue.remove(0);
+                            countProcess--;
+                            break;
+                        }
+                    }
                 }
             }
-            if (!firstComeFirstServedQueue.isEmpty()) {
-                if (firstComeFirstServedQueue.get(0).getStatus() == "Running") {
-                    firstComeFirstServedQueue.get(0).setStatus(4);  // ก็จะเซ็ตค่าเป็น Terminate
-                    terminateQueue.add(firstComeFirstServedQueue.get(0)); //เซ็ตค่า terminateQueue ตาม  jobQueue ตําแหน่งที่ i
-                    firstComeFirstServedQueue.remove(0); // ลบ  roundRobinQueue ตําแหน่งที่ 0
-                    addCount--; //ลดค่า addCount ลงทีละ 1
-                }
-            }
-
-
         } catch (java.lang.IndexOutOfBoundsException e) { //
 
         }
@@ -216,6 +203,17 @@ public class Controller {
 
             }
         }
+    }
+
+    public void avgWaitingTime(int avgWaitingTime) {
+        this.avgWaitingTime = this.avgWaitingTime + avgWaitingTime;
+    }
+
+    public String getAvgWaitingTime() {
+        if (terminateQueue.isEmpty()) {
+            return "0";
+        } else
+            return String.format("%.2f", avgWaitingTime / terminateQueue.size());
     }
 
     /////////////////////////////////////////////IO///////////////////////////////////////////////////////////////
@@ -276,6 +274,17 @@ public class Controller {
         }
     }
 
+    public void waitingTimeMonitorQueue() {
+        for (int i = 1; i < monitorQueue.size(); i++) { //Loop ถ้า i = 1 เช็คว่า i < monitorQueue.size ก็จะเพื่มค่า i ครั้งละ 1
+            if (monitorQueue.get(i).getStatus() == "Waiting") {  // ถ้า monitorQueue ตําแหน่งที่ i เท่ากับ "Waiting"
+                waitingTime = monitorQueue.get(i).getWaitingTime();  //โดย get ค่า waitingTime มาใช้งาน
+                waitingTime++; //เพิ่มค่า waitingTime ขึ้นทีละ 1
+                monitorQueue.get(i).setWaitingTime(waitingTime);//โดยนําค่า waitingTime มาเก็บยัง setBurstTime ของ Process นั้น
+
+            }
+        }
+    }
+
     //Method set การทำงานของ USB
     public void usbQueue() {
         try {
@@ -330,6 +339,17 @@ public class Controller {
             }
         } catch (java.lang.IndexOutOfBoundsException e) {
 
+        }
+    }
+
+    public void waitingTimeUsbQueue() {
+        for (int i = 1; i < usbQueue.size(); i++) { //Loop ถ้า i = 1 เช็คว่า i < monitorQueue.size ก็จะเพื่มค่า i ครั้งละ 1
+            if (usbQueue.get(i).getStatus() == "Waiting") {  // ถ้า monitorQueue ตําแหน่งที่ i เท่ากับ "Waiting"
+                waitingTime = usbQueue.get(i).getWaitingTime();  //โดย get ค่า waitingTime มาใช้งาน
+                waitingTime++; //เพิ่มค่า waitingTime ขึ้นทีละ 1
+                usbQueue.get(i).setWaitingTime(waitingTime);//โดยนําค่า waitingTime มาเก็บยัง setBurstTime ของ Process นั้น
+
+            }
         }
     }
 
@@ -406,6 +426,7 @@ public class Controller {
         for (int index = 0; index < terminateQueue.size(); index++) {
             text = text + terminateQueue.get(index).getProcessID() + " ";
             text = text + terminateQueue.get(index).getStatus() + " ";
+            text = text + terminateQueue.get(index).getWaitingTime() + " ";
             text = text + ",";
         }
         return text;

@@ -8,16 +8,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class View extends javax.swing.JFrame {
-    public View() {
-        initComponents();
-        jButtonAddProcess.setEnabled(false);
-        jButtonEndTask.setEnabled(false);
-        jButtonAddIoMonitor.setEnabled(false);
-        jButtonEndIoMonitor.setEnabled(false);
-        jButtonAddIoUsb.setEnabled(false);
-        jButtonEndIoUsb.setEnabled(false);
-        jButtonReset.setEnabled(false);
-    }
     Model model;
     Timer mytime = new Timer();
     Controller controller = new Controller();
@@ -81,6 +71,45 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JTable jTableUsb;
     private javax.swing.JTable jTableMonitor;
     private javax.swing.JTable jTableTerminate;
+
+    public View() {
+        initComponents();
+        jButtonAddProcess.setEnabled(false);
+        jButtonEndTask.setEnabled(false);
+        jButtonAddIoMonitor.setEnabled(false);
+        jButtonEndIoMonitor.setEnabled(false);
+        jButtonAddIoUsb.setEnabled(false);
+        jButtonEndIoUsb.setEnabled(false);
+        jButtonReset.setEnabled(false);
+    }
+
+    public static void main(String args[]) {
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(View.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(View.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(View.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(View.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new View().setVisible(true);
+            }
+        });
+    }
+
     // End of variables declaration
     private void initComponents() {
 
@@ -229,10 +258,10 @@ public class View extends javax.swing.JFrame {
         jTableJobQueue.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jTableJobQueue.setFont(new java.awt.Font("Leelawadee UI", 1, 16)); // NOI18N
         jTableJobQueue.setModel(new javax.swing.table.DefaultTableModel(
-                new Object [][] {
+                new Object[][]{
 
                 },
-                new String [] {
+                new String[]{
                         "PID", "Status", "Arrival Time", "Burst Time", "Waiting Time", "I/O Time"
                 }
         ));
@@ -275,10 +304,10 @@ public class View extends javax.swing.JFrame {
 
         jTableRr.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jTableRr.setModel(new javax.swing.table.DefaultTableModel(
-                new Object [][] {
+                new Object[][]{
 
                 },
-                new String [] {
+                new String[]{
                         "PID", "Status", "Arrival Time", "Burst Time", "Waiting Time"
                 }
         ));
@@ -286,10 +315,10 @@ public class View extends javax.swing.JFrame {
 
         jTableFcfs.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jTableFcfs.setModel(new javax.swing.table.DefaultTableModel(
-                new Object [][] {
+                new Object[][]{
 
                 },
-                new String [] {
+                new String[]{
                         "PID", "Status", "Arrival Time", "Burst Time", "Waiting Time"
                 }
         ));
@@ -434,10 +463,10 @@ public class View extends javax.swing.JFrame {
 
         jTableIoMonitor.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jTableIoMonitor.setModel(new javax.swing.table.DefaultTableModel(
-                new Object [][] {
+                new Object[][]{
 
                 },
-                new String [] {
+                new String[]{
                         "PID", "Status", "Waiting Time"
                 }
         ));
@@ -474,10 +503,10 @@ public class View extends javax.swing.JFrame {
 
         jTableIoQUsb.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jTableIoQUsb.setModel(new javax.swing.table.DefaultTableModel(
-                new Object [][] {
+                new Object[][]{
 
                 },
-                new String [] {
+                new String[]{
                         "PID", "Status", "Waiting Time"
                 }
         ));
@@ -513,11 +542,11 @@ public class View extends javax.swing.JFrame {
 
         jTableCpu.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jTableCpu.setModel(new javax.swing.table.DefaultTableModel(
-                new Object [][] {
+                new Object[][]{
 
                 },
-                new String [] {
-                        "PID", "Status" ,"Queue"
+                new String[]{
+                        "PID", "Status", "Queue"
                 }
         ));
         jScrollPanePCpu.setViewportView(jTableCpu);
@@ -568,10 +597,10 @@ public class View extends javax.swing.JFrame {
         jTableMonitor.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jTableMonitor.setFont(new java.awt.Font("Leelawadee UI", 1, 16)); // NOI18N
         jTableMonitor.setModel(new javax.swing.table.DefaultTableModel(
-                new Object [][] {
+                new Object[][]{
 
                 },
-                new String [] {
+                new String[]{
                         "PID", "Status", "I/O Time"
                 }
         ));
@@ -621,10 +650,10 @@ public class View extends javax.swing.JFrame {
 
         jTableUsb.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jTableUsb.setModel(new javax.swing.table.DefaultTableModel(
-                new Object [][] {
+                new Object[][]{
 
                 },
-                new String [] {
+                new String[]{
                         "PID", "Status", "I/O Time"
                 }
         ));
@@ -676,11 +705,11 @@ public class View extends javax.swing.JFrame {
 
         jTableTerminate.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jTableTerminate.setModel(new javax.swing.table.DefaultTableModel(
-                new Object [][] {
+                new Object[][]{
 
                 },
-                new String [] {
-                        "PID", "Status" ,"Waiting Time" ,"Turnaround Time"
+                new String[]{
+                        "PID", "Status", "Waiting Time", "Turnaround Time"
                 }
         ));
         jScrollPaneTerminate.setViewportView(jTableTerminate);
@@ -809,6 +838,7 @@ public class View extends javax.swing.JFrame {
     private void jButtonResetActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO:resetActionPerformed
         controller.reset();
+        clock = 0;
     }
 
     private void jButtonEndTaskActionPerformed(java.awt.event.ActionEvent evt) {
@@ -821,15 +851,11 @@ public class View extends javax.swing.JFrame {
 
         //  timeQuantum = Integer.parseInt(jTextField_TimeQuantum.getText());
         jButtonAddProcess.setEnabled(true);
-        jButtonEndTask.setEnabled(true);
-        jButtonAddIoMonitor.setEnabled(true);
-        jButtonEndIoMonitor.setEnabled(true);
-        jButtonAddIoUsb.setEnabled(true);
-        jButtonEndIoUsb.setEnabled(true);
         jButtonStart.setEnabled(false);
         jButtonReset.setEnabled(true);
         clockTime();
     }
+
     private void jButtonAddIoMinitorActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO Add_IOMActionPerformed
         controller.addMonitorQueue();
@@ -844,12 +870,13 @@ public class View extends javax.swing.JFrame {
         // TODO Add_IOUActionPerformed
         controller.addUsbQueue();
     }
+
     private void jButtonEndIoUsbActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO End_IOUActionPerformed
         controller.endUsbQueue();
     }
 
-    public void clockTime(){
+    public void clockTime() {
         TimerTask task = new TimerTask() {
             public void run() {
                 //TODO run
@@ -860,7 +887,7 @@ public class View extends javax.swing.JFrame {
                 jLabelTotalProcess.setText(Integer.toString(controller.getCountProcess()));
                 jLabelAvgTime.setText(controller.getAvgWaitingTime());
                 jLabelTimeTurnaround.setText(controller.getAvgTurnaroundTime());
-                System.out.println(controller.getAvgWaitingTime());
+                setButton();
 
                 showJob(controller.showJobQueue());
                 showJobFcfs(controller.showFirstComeFirstServedQueue());
@@ -883,6 +910,25 @@ public class View extends javax.swing.JFrame {
         };
         mytime.scheduleAtFixedRate(task, 1000, 1000);
     }
+
+    //TODO Button
+    public void setButton() {
+        if (controller.getCountProcess() != 0) {
+            jButtonEndTask.setEnabled(true);
+            jButtonAddIoMonitor.setEnabled(true);
+            jButtonEndIoMonitor.setEnabled(true);
+            jButtonAddIoUsb.setEnabled(true);
+            jButtonEndIoUsb.setEnabled(true);
+        } else {
+            jButtonEndTask.setEnabled(false);
+            jButtonAddIoMonitor.setEnabled(false);
+            jButtonEndIoMonitor.setEnabled(false);
+            jButtonAddIoUsb.setEnabled(false);
+            jButtonEndIoUsb.setEnabled(false);
+        }
+
+    }
+
     public void showJob(String text) {
         try {
             DefaultTableModel model1 = (DefaultTableModel) jTableJobQueue.getModel();
@@ -973,7 +1019,7 @@ public class View extends javax.swing.JFrame {
             String[] textTable2 = text.split(",");
             for (int index = 0; index < textTable2.length; index++) {
                 String[] textTable1 = textTable2[index].split(" ");
-                model1.addRow(new Object[]{textTable1[0], textTable1[1],textTable1[2]});
+                model1.addRow(new Object[]{textTable1[0], textTable1[1], textTable1[2]});
                 System.out.println(textTable1[1]);
             }
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -1001,6 +1047,7 @@ public class View extends javax.swing.JFrame {
         }
 
     }
+
     public void showJobMonitorQueue(String text) {
         try {
             DefaultTableModel model1 = (DefaultTableModel) jTableIoMonitor.getModel();
@@ -1021,7 +1068,6 @@ public class View extends javax.swing.JFrame {
 
     }
 
-
     public void showJobUSB(String text) {
         try {
             DefaultTableModel model1 = (DefaultTableModel) jTableUsb.getModel();
@@ -1040,6 +1086,7 @@ public class View extends javax.swing.JFrame {
         }
 
     }
+
     public void showJobUsbQueue(String text) {
         try {
             DefaultTableModel model1 = (DefaultTableModel) jTableIoQUsb.getModel();
@@ -1058,31 +1105,5 @@ public class View extends javax.swing.JFrame {
 
         }
 
-    }
-    public static void main(String args[]) {
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(View.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(View.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(View.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(View.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new View().setVisible(true);
-            }
-        });
     }
 }

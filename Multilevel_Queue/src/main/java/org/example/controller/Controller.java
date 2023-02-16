@@ -21,7 +21,7 @@ public class Controller {
     int memory;
 
     int jQ = 0;  // ใช้ แทน burstTime ใน  firstComeFirstServedQueue
-    int countProcess = 0; // ใช้ นับจำนวน procees ทั้งหมด
+    int countProcess = 0; // ใช้ นับจำนวน process ทั้งหมด
     int timeRunning = 0; // ใช้ กำหนดช่วงเวลาทำงานของ process
     int ioTime = 0;  // ใช้ กำหนดช่วงเวลาทำงานของ IO
     double avgWaitingTime = 0;
@@ -106,8 +106,8 @@ public class Controller {
 
                     if (jobQueue.get(i).getTimeQuantum() == 0) {  // นําค่า getQuantumTime() ของ Process นั้น มาเทียบค่าว่า มีค่า เท่ากับ 0 หรือไม่ ถ้าเท่ากันก็จะเข้าเงื่อนไขเป็นจริง
                         jobQueue.get(i).setStatus(1);  //โดยถ้าเป็น 0 ก็จะเซ็ตให้ Process นั้น มีค่าสถานะเป็น Ready
-                        roundRobinQueue.add(jobQueue.get(i)); //และทําการ Add Process นั้นเข้าไปรอใน ReadyQueue เพื่อรอเข้าใช้งาน Cpu ต่อไป
-                        roundRobinQueue.remove(0); //และ Remove ReadyQueue ตําแหน่งที่ 0 ออกมาเพื่อเอา Process นั้นไปใช้งาน Cpu ต่อโดยจะไปเช็คเงื่อนไข if ด้านบนสุด
+                        roundRobinQueue.add(jobQueue.get(i)); //และทําการ Add Process นั้นเข้าไปรอใน roundRobinQueue เพื่อรอเข้าใช้งาน Cpu ต่อไป
+                        roundRobinQueue.remove(0); //และ Remove roundRobinQueue ตําแหน่งที่ 0 ออกมาเพื่อเอา Process นั้นไปใช้งาน Cpu ต่อโดยจะไปเช็คเงื่อนไข if ด้านบนสุด
                         jobQueue.get(i).setTimeQuantum(timeQueam); //และนําค่า timeQueam ที่เรานํามาจากฝั่ง View เช็ตค่าให้กับ QuantumTime นั้นไปใช้งาน
                     }
                 } else if (jobQueue.get(i).getStatus() != "Waiting") {
@@ -173,7 +173,7 @@ public class Controller {
                             avgWaitingTime(jobQueue.get(i).getWaitingTime());
                             jobQueue.remove(i);// ลบ  jobQueue ตําแหน่งที่ i
                             roundRobinQueue.remove(0); // ลบ  roundRobinQueue ตําแหน่งที่ 0
-                            countProcess--; //ลดค่า addCount ลงทีละ 1
+                            countProcess--; //ลดค่า countProcess ลงทีละ 1
                             break;
                         }
                     }

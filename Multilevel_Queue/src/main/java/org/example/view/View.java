@@ -1,8 +1,6 @@
-
 package org.example.view;
 
 import org.example.controller.Controller;
-import org.example.model.Model;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -12,13 +10,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Timer;
 import java.util.TimerTask;
+
 public class View extends javax.swing.JFrame {
-    Model model;
     Timer mytime = new Timer();
     Controller controller = new Controller();
     private int clock;
     private int timeQuantum = 5;
-    // Variables declaration - do not modify
     private javax.swing.JButton jButtonAddProcess;
     private javax.swing.JButton jButtonEndTask;
     private javax.swing.JButton jButtonReset;
@@ -77,6 +74,45 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JTable jTableUsb;
     private javax.swing.JTable jTableMonitor;
     private javax.swing.JTable jTableTerminate;
+
+    public View() {
+        initComponents();
+        jButtonAddProcess.setEnabled(false);
+        jButtonEndTask.setEnabled(false);
+        jButtonAddIoMonitor.setEnabled(false);
+        jButtonEndIoMonitor.setEnabled(false);
+        jButtonAddIoUsb.setEnabled(false);
+        jButtonEndIoUsb.setEnabled(false);
+        jButtonReset.setEnabled(false);
+    }
+
+    public static void main(String args[]) {
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(View.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(View.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(View.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(View.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new View().setVisible(true);
+            }
+        });
+    }
+
     // End of variables declaration
     private void initComponents() {
 
@@ -225,10 +261,10 @@ public class View extends javax.swing.JFrame {
         jTableJobQueue.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
         jTableJobQueue.setFont(new Font("Leelawadee UI", 1, 16)); // NOI18N
         jTableJobQueue.setModel(new DefaultTableModel(
-                new Object [][] {
+                new Object[][]{
 
                 },
-                new String [] {
+                new String[]{
                         "PID", "Status", "Arrival Time", "Burst Time", "Waiting Time", "I/O Time"
                 }
         ));
@@ -272,12 +308,12 @@ public class View extends javax.swing.JFrame {
         jLabelRr.setText("RoundRobin ( Queue 1 )");
 
         jTableRr.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
-        jTableRr.setFont(new Font("Leelawadee UI",1 ,16));// NOI18N
+        jTableRr.setFont(new Font("Leelawadee UI", 1, 16));// NOI18N
         jTableRr.setModel(new DefaultTableModel(
-                new Object [][] {
+                new Object[][]{
 
                 },
-                new String [] {
+                new String[]{
                         "PID", "Status", "Arrival Time", "Burst Time", "Waiting Time"
                 }
         ));
@@ -286,12 +322,12 @@ public class View extends javax.swing.JFrame {
         jScrollPaneRr.setViewportView(jTableRr);
 
         jTableFcfs.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
-        jTableFcfs.setFont(new Font("Leelawadee UI",1 ,16));// NOI18N
+        jTableFcfs.setFont(new Font("Leelawadee UI", 1, 16));// NOI18N
         jTableFcfs.setModel(new DefaultTableModel(
-                new Object [][] {
+                new Object[][]{
 
                 },
-                new String [] {
+                new String[]{
                         "PID", "Status", "Arrival Time", "Burst Time", "Waiting Time"
                 }
         ));
@@ -345,7 +381,8 @@ public class View extends javax.swing.JFrame {
         jButtonAddProcess.setText("Add Process");
         jButtonAddProcess.setBorder(null);
         jButtonAddProcess.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {jButtonAddProcessActionPerformed(evt);
+            public void actionPerformed(ActionEvent evt) {
+                jButtonAddProcessActionPerformed(evt);
             }
         });
 
@@ -354,7 +391,8 @@ public class View extends javax.swing.JFrame {
         jButtonReset.setText("RESET");
         jButtonReset.setBorder(null);
         jButtonReset.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {jButtonResetActionPerformed(evt);
+            public void actionPerformed(ActionEvent evt) {
+                jButtonResetActionPerformed(evt);
             }
         });
 
@@ -436,12 +474,12 @@ public class View extends javax.swing.JFrame {
         jPanelIoQUsb.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
 
         jTableIoQUsb.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
-        jTableIoQUsb.setFont(new Font("Leelawadee UI",1 ,16));// NOI18N
+        jTableIoQUsb.setFont(new Font("Leelawadee UI", 1, 16));// NOI18N
         jTableIoQUsb.setModel(new DefaultTableModel(
-                new Object [][] {
+                new Object[][]{
 
                 },
-                new String [] {
+                new String[]{
                         "PID", "Status", "Waiting Time"
                 }
         ));
@@ -478,13 +516,13 @@ public class View extends javax.swing.JFrame {
         );
 
         jTableCpu.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
-        jTableCpu.setFont(new Font("Leelawadee UI",1 ,20));// NOI18N
+        jTableCpu.setFont(new Font("Leelawadee UI", 1, 20));// NOI18N
         jTableCpu.setModel(new DefaultTableModel(
-                new Object [][] {
+                new Object[][]{
 
                 },
-                new String [] {
-                        "PID", "Status"
+                new String[]{
+                        "PID", "Status", "Queue"
                 }
         ));
         jTableCpu.setRowHeight(42);
@@ -497,12 +535,12 @@ public class View extends javax.swing.JFrame {
         jPanelIoMonitor.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2));
 
         jTableIoMonitor.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
-        jTableIoMonitor.setFont(new Font("Leelawadee UI",1 ,16));// NOI18N
+        jTableIoMonitor.setFont(new Font("Leelawadee UI", 1, 16));// NOI18N
         jTableIoMonitor.setModel(new DefaultTableModel(
-                new Object [][] {
+                new Object[][]{
 
                 },
-                new String [] {
+                new String[]{
                         "PID", "Status", "Waiting Time"
                 }
         ));
@@ -581,12 +619,12 @@ public class View extends javax.swing.JFrame {
         jPanelAddEndIo.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2));
 
         jTableMonitor.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
-        jTableMonitor.setFont(new Font("Leelawadee UI",1 ,16));// NOI18N
+        jTableMonitor.setFont(new Font("Leelawadee UI", 1, 16));// NOI18N
         jTableMonitor.setModel(new DefaultTableModel(
-                new Object [][] {
+                new Object[][]{
 
                 },
-                new String [] {
+                new String[]{
                         "PID", "Status", "I/O Time"
                 }
         ));
@@ -600,7 +638,8 @@ public class View extends javax.swing.JFrame {
         jButtonAddIoMonitor.setToolTipText("");
         jButtonAddIoMonitor.setBorder(null);
         jButtonAddIoMonitor.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {jButtonAddIoMinitorActionPerformed(evt);
+            public void actionPerformed(ActionEvent evt) {
+                jButtonAddIoMinitorActionPerformed(evt);
             }
         });
 
@@ -609,7 +648,8 @@ public class View extends javax.swing.JFrame {
         jButtonEndIoMonitor.setText("End I/O");
         jButtonEndIoMonitor.setBorder(null);
         jButtonEndIoMonitor.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {jButtonEndIoMinitorActionPerformed(evt);
+            public void actionPerformed(ActionEvent evt) {
+                jButtonEndIoMinitorActionPerformed(evt);
             }
         });
 
@@ -629,17 +669,18 @@ public class View extends javax.swing.JFrame {
         jButtonEndIoUsb.setText("End I/O");
         jButtonEndIoUsb.setBorder(null);
         jButtonEndIoUsb.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {jButtonEndIoUsbActionPerformed(evt);
+            public void actionPerformed(ActionEvent evt) {
+                jButtonEndIoUsbActionPerformed(evt);
             }
         });
 
         jTableUsb.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
-        jTableUsb.setFont(new Font("Leelawadee UI",1 ,16));// NOI18N
+        jTableUsb.setFont(new Font("Leelawadee UI", 1, 16));// NOI18N
         jTableUsb.setModel(new DefaultTableModel(
-                new Object [][] {
+                new Object[][]{
 
                 },
-                new String [] {
+                new String[]{
                         "PID", "Status", "I/O Time"
                 }
         ));
@@ -693,13 +734,13 @@ public class View extends javax.swing.JFrame {
         jPanelTerminate.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2));
 
         jTableTerminate.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
-        jTableTerminate.setFont(new Font("Leelawadee UI",1 ,16));// NOI18N
+        jTableTerminate.setFont(new Font("Leelawadee UI", 1, 16));// NOI18N
         jTableTerminate.setModel(new DefaultTableModel(
-                new Object [][] {
+                new Object[][]{
 
                 },
-                new String [] {
-                        "PID", "Status"
+                new String[]{
+                        "PID", "Status", "Waiting Time", "Turnaround Time"
                 }
         ));
         jTableTerminate.setRowHeight(25);
@@ -827,8 +868,9 @@ public class View extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>
+
     private void jButtonAddProcessActionPerformed(java.awt.event.ActionEvent evt) {
-        //TODO addPrpcess
+        //TODO addProcess
         controller.addProcess(clock, timeQuantum);
     }
 
@@ -845,8 +887,6 @@ public class View extends javax.swing.JFrame {
 
     private void jButtonStartActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO StartActionPerformed
-
-        //  timeQuantum = Integer.parseInt(jTextField_TimeQuantum.getText());
         jButtonAddProcess.setEnabled(true);
         jButtonStart.setEnabled(false);
         jButtonReset.setEnabled(true);
@@ -873,60 +913,39 @@ public class View extends javax.swing.JFrame {
         controller.endUsbQueue();
     }
 
-    public View() {
-        initComponents();
-        jButtonAddProcess.setEnabled(false);
-        jButtonEndTask.setEnabled(false);
-        jButtonAddIoMonitor.setEnabled(false);
-        jButtonEndIoMonitor.setEnabled(false);
-        jButtonAddIoUsb.setEnabled(false);
-        jButtonEndIoUsb.setEnabled(false);
-        jButtonReset.setEnabled(false);
-    }
-    public static void main(String args[]) {
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(View.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(View.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(View.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(View.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new View().setVisible(true);
-            }
-        });
-    }
-
     //TODO All Function
-    public void setButton() {
-        if (controller.getCountProcess() != 0) {
-            jButtonEndTask.setEnabled(true);
-            jButtonAddIoMonitor.setEnabled(true);
-            jButtonEndIoMonitor.setEnabled(true);
-            jButtonAddIoUsb.setEnabled(true);
-            jButtonEndIoUsb.setEnabled(true);
-        } else {
-            jButtonEndTask.setEnabled(false);
+    public void setButtonAddIO() {
+        if (jTableJobQueue.getRowCount() == 0) {
             jButtonAddIoMonitor.setEnabled(false);
-            jButtonEndIoMonitor.setEnabled(false);
             jButtonAddIoUsb.setEnabled(false);
-            jButtonEndIoUsb.setEnabled(false);
+        } else {
+            jButtonAddIoMonitor.setEnabled(true);
+            jButtonAddIoUsb.setEnabled(true);
         }
 
     }
+
+    public void setButtonEndTask() {
+        if (jTableCpu.getRowCount() == 0) {
+            jButtonEndTask.setEnabled(false);
+        } else {
+            jButtonEndTask.setEnabled(true);
+        }
+    }
+
+    public void setButtonEndIo() {
+        if (jTableMonitor.getRowCount() == 0) {
+            jButtonEndIoMonitor.setEnabled(false);
+        } else {
+            jButtonEndIoMonitor.setEnabled(true);
+        }
+        if (jTableUsb.getRowCount() == 0) {
+            jButtonEndIoUsb.setEnabled(false);
+        } else {
+            jButtonEndIoUsb.setEnabled(true);
+        }
+    }
+
     public void clockTime() {
         TimerTask task = new TimerTask() {
             public void run() {
@@ -938,7 +957,9 @@ public class View extends javax.swing.JFrame {
                 jLabelTotalProcess.setText(Integer.toString(controller.getCountProcess()));
                 jLabelAvgTime.setText(controller.getAvgWaitingTime());
                 jLabelTimeTurnaround.setText(controller.getAvgTurnaroundTime());
-                setButton();
+                setButtonAddIO();
+                setButtonEndTask();
+                setButtonEndIo();
 
                 showJob(controller.showJobQueue());
                 showJobFcfs(controller.showFirstComeFirstServedQueue());
@@ -961,6 +982,7 @@ public class View extends javax.swing.JFrame {
         };
         mytime.scheduleAtFixedRate(task, 1000, 1000);
     }
+
     public void showJob(String text) {
         try {
             DefaultTableModel model1 = (DefaultTableModel) jTableJobQueue.getModel();
@@ -980,6 +1002,7 @@ public class View extends javax.swing.JFrame {
         }
 
     }
+
     public void showJobFcfs(String text) {
         try {
             DefaultTableModel model1 = (DefaultTableModel) jTableFcfs.getModel();
@@ -998,6 +1021,7 @@ public class View extends javax.swing.JFrame {
 
         }
     }
+
     public void showJobRr(String text) {
         try {
             DefaultTableModel model1 = (DefaultTableModel) jTableRr.getModel();
@@ -1017,6 +1041,7 @@ public class View extends javax.swing.JFrame {
         }
 
     }
+
     public void showJobTerminateQueue(String text) {
         try {
             DefaultTableModel model1 = (DefaultTableModel) jTableTerminate.getModel();
@@ -1036,6 +1061,7 @@ public class View extends javax.swing.JFrame {
         }
 
     }
+
     public void showJobCPU(String text) {
         try {
             DefaultTableModel model1 = (DefaultTableModel) jTableCpu.getModel();
@@ -1055,6 +1081,7 @@ public class View extends javax.swing.JFrame {
         }
 
     }
+
     public void showJobMonitor(String text) {
         try {
             DefaultTableModel model1 = (DefaultTableModel) jTableMonitor.getModel();
@@ -1074,6 +1101,7 @@ public class View extends javax.swing.JFrame {
         }
 
     }
+
     public void showJobMonitorQueue(String text) {
         try {
             DefaultTableModel model1 = (DefaultTableModel) jTableIoMonitor.getModel();
@@ -1093,6 +1121,7 @@ public class View extends javax.swing.JFrame {
         }
 
     }
+
     public void showJobUSB(String text) {
         try {
             DefaultTableModel model1 = (DefaultTableModel) jTableUsb.getModel();
@@ -1111,6 +1140,7 @@ public class View extends javax.swing.JFrame {
         }
 
     }
+
     public void showJobUsbQueue(String text) {
         try {
             DefaultTableModel model1 = (DefaultTableModel) jTableIoQUsb.getModel();

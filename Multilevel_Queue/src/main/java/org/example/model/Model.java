@@ -14,10 +14,9 @@ public class Model {
     private int countPercent;
     private int timeQuantum;
     private int index;
-    private int memory;
     private int turnaroundTime;
 
-    public Model(int processID, int index, int arrivalTime, int waitingTime, int ioTime, int timeQuantum, int burstTime, int memory,int turnaroundTime) {
+    public Model(int processID, int index, int arrivalTime, int waitingTime, int ioTime, int timeQuantum, int burstTime,int turnaroundTime) {
         this.processID = processID;
         this.arrivalTime = arrivalTime;
         this.waitingTime = waitingTime;
@@ -26,7 +25,6 @@ public class Model {
         this.timeQuantum = timeQuantum;
         this.burstTime = burstTime;
         this.index = index;
-        this.memory = memory;
         this.turnaroundTime = turnaroundTime;
     }
 

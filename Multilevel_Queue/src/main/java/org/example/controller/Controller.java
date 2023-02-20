@@ -13,14 +13,11 @@ public class Controller {
     ArrayList<Model> monitorQueue = new ArrayList<Model>();
     ArrayList<Model> usbQueue = new ArrayList<Model>();
     int pId = 1;  //ProcessID กําหนดให้เริ่มต้นที่ ProcessID = 1
-    int timeQuantum = 0; //ตัวแปลไว้เก็บค่า TimeQuatum จากฝั่ง View
+    int timeQuantum = 0; //ตัวแปลไว้เก็บค่า timeQuantum จากฝั่ง View
     int burstTime = 0; //ค่า burstTime
-    int timeQueam = 0;// ตัวแปลที่ใช่ดึงค่า TimeQueam เพื่อโยนค่าให้กับตัว Process แต่ละตัวให้ทํางานตาม TimeQueam
-    // int tqt = 0;
-    int waitingTime = 0; // ใช้เก็บค่า Watingtime
-    int memory;
-
-    int jQ = 0;  // ใช้ แทน burstTime ใน  firstComeFirstServedQueue
+    int resetTimeQuantum;// ตัวแปลที่ใช่ดึงค่า TimeQueam เพื่อโยนค่าให้กับตัว Process แต่ละตัวให้ทํางานตาม TimeQueam
+    int waitingTime = 0; // ใช้เก็บค่า WaitingTime
+    int bTFcfs = 0;  // ใช้ แทน burstTime ใน  firstComeFirstServedQueue
     int countProcess = 0; // ใช้ นับจำนวน process ทั้งหมด
     int timeRunning = 0; // ใช้ กำหนดช่วงเวลาทำงานของ process
     int ioTime = 0;  // ใช้ กำหนดช่วงเวลาทำงานของ IO
@@ -33,8 +30,7 @@ public class Controller {
     ////////////////////////////////////////addProcess////////////////////////////////////////////////////////////////////////////
     //method ปุ่ม addProcess คือมี paramiter อยู่ 2 ตัว รับมาจากฝั่ง View คือตัวแปล clock timeQuantum Method นี้จะถูกนําไปเรียกใช้ในฝั่ง View
     public void addProcess(int clock, int timeQuantum) {
-        memory = (int) (Math.random() * (284) + 2);
-        model = new Model(pId, 0, clock, 0, 0, timeQuantum, 0, memory, 0);
+        model = new Model(pId, 0, clock, 0, 0, timeQuantum, 0, 0);
         pId++;
         countProcess++;
         jobQueue.add(model);
@@ -77,9 +73,9 @@ public class Controller {
             for (int i = 0; i < jobQueue.size(); i++) { //Loop ถ้า i = 0 เช็คว่า i < jobQueue.size ก็จะเพื่มค่า i ครั้งละ 1
                 if (firstComeFirstServedQueue.get(0) == jobQueue.get(i)) { // ถ้า firstComeFirstServedQueue ตําแหน่งที่ 0 เท่ากับ jobQueue ตําแหน่งที่ i
                     jobQueue.get(i).setStatus(2); // ก็จะเซ็ตค่าเป็น Running
-                    jQ = firstComeFirstServedQueue.get(0).getBurstTime();   //โดย get ค่า jQ Process นั้นมา ให้มีค่าเท่ากับ burstTime
-                    jQ++;  //และเพิ่มค่า jQ ขึ้นที่ละ 1
-                    jobQueue.get(i).setBurstTime(jQ); //โดยนําค่า jQ มาเก็บยัง setBurstTime ของ Process นั้น
+                    bTFcfs = firstComeFirstServedQueue.get(0).getBurstTime();   //โดย get ค่า jQ Process นั้นมา ให้มีค่าเท่ากับ burstTime
+                    bTFcfs++;  //และเพิ่มค่า jQ ขึ้นที่ละ 1
+                    jobQueue.get(i).setBurstTime(bTFcfs); //โดยนําค่า jQ มาเก็บยัง setBurstTime ของ Process นั้น
                 } else if (jobQueue.get(i).getStatus() != "Waiting") {
                     jobQueue.get(i).setStatus(1);
                 }
@@ -108,7 +104,7 @@ public class Controller {
                         jobQueue.get(i).setStatus(1);  //โดยถ้าเป็น 0 ก็จะเซ็ตให้ Process นั้น มีค่าสถานะเป็น Ready
                         roundRobinQueue.add(jobQueue.get(i)); //และทําการ Add Process นั้นเข้าไปรอใน roundRobinQueue เพื่อรอเข้าใช้งาน Cpu ต่อไป
                         roundRobinQueue.remove(0); //และ Remove roundRobinQueue ตําแหน่งที่ 0 ออกมาเพื่อเอา Process นั้นไปใช้งาน Cpu ต่อโดยจะไปเช็คเงื่อนไข if ด้านบนสุด
-                        jobQueue.get(i).setTimeQuantum(timeQueam); //และนําค่า timeQueam ที่เรานํามาจากฝั่ง View เช็ตค่าให้กับ QuantumTime นั้นไปใช้งาน
+                        jobQueue.get(i).setTimeQuantum(resetTimeQuantum); //และนําค่า timeQueam ที่เรานํามาจากฝั่ง View เช็ตค่าให้กับ QuantumTime นั้นไปใช้งาน
                     }
                 } else if (jobQueue.get(i).getStatus() != "Waiting") {
                     jobQueue.get(i).setStatus(1);
@@ -119,12 +115,8 @@ public class Controller {
         }
     }
 
-    public void tqt(int qT) {
-        int q;
-        for (q = 0; q < qT; q++) {
-
-        }
-        timeQueam = q;
+    public void resetTimeQuantum(int qT) {
+        resetTimeQuantum = qT;
     }
 
     public int getCountProcess() {

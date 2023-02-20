@@ -15,6 +15,7 @@ public class View extends javax.swing.JFrame {
     Timer mytime = new Timer();
     Controller controller = new Controller();
     private int clock;
+    //TODO setTimeQuantum
     private int timeQuantum = 5;
     private javax.swing.JButton jButtonAddProcess;
     private javax.swing.JButton jButtonEndTask;
@@ -639,7 +640,7 @@ public class View extends javax.swing.JFrame {
         jButtonAddIoMonitor.setBorder(null);
         jButtonAddIoMonitor.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                jButtonAddIoMinitorActionPerformed(evt);
+                jButtonAddIoMonitorActionPerformed(evt);
             }
         });
 
@@ -649,7 +650,7 @@ public class View extends javax.swing.JFrame {
         jButtonEndIoMonitor.setBorder(null);
         jButtonEndIoMonitor.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                jButtonEndIoMinitorActionPerformed(evt);
+                jButtonEndIoMonitorActionPerformed(evt);
             }
         });
 
@@ -893,12 +894,12 @@ public class View extends javax.swing.JFrame {
         clockTime();
     }
 
-    private void jButtonAddIoMinitorActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jButtonAddIoMonitorActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO Add_IOMActionPerformed
         controller.addMonitorQueue();
     }
 
-    private void jButtonEndIoMinitorActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jButtonEndIoMonitorActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO End_IOMActionPerformed
         controller.endMonitorQueue();
     }
@@ -915,7 +916,7 @@ public class View extends javax.swing.JFrame {
 
     //TODO All Function
     public void setButtonAddIO() {
-        if (jTableJobQueue.getRowCount() == 0) {
+        if (jTableCpu.getRowCount() == 0) {
             jButtonAddIoMonitor.setEnabled(false);
             jButtonAddIoUsb.setEnabled(false);
         } else {
@@ -971,7 +972,7 @@ public class View extends javax.swing.JFrame {
                 showJobUSB(controller.showUsb());
                 showJobUsbQueue(controller.showUsbQueue());
 
-                controller.tqt(timeQuantum);
+                controller.resetTimeQuantum(timeQuantum);
                 controller.randomRunning(clock);
                 controller.waitingTime();
                 controller.waitingTimeMonitorQueue();

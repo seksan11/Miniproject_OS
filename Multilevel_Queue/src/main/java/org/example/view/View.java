@@ -77,6 +77,7 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JTable jTableTerminate;
 
     public View() {
+        //TODO setDisButton
         initComponents();
         jButtonAddProcess.setEnabled(false);
         jButtonEndTask.setEnabled(false);
@@ -266,7 +267,7 @@ public class View extends javax.swing.JFrame {
 
                 },
                 new String[]{
-                        "PID", "Status", "Arrival Time", "Burst Time", "Waiting Time", "I/O Time"
+                        "PID", "Status", "Arrival Time", "Burst Time", "Waiting Time", "I/O Time", "Queue"
                 }
         ));
         jTableJobQueue.setRowHeight(25);
@@ -995,7 +996,7 @@ public class View extends javax.swing.JFrame {
             String[] textTable2 = text.split(",");
             for (int index = 0; index < textTable2.length; index++) {
                 String[] textTable1 = textTable2[index].split(" ");
-                model1.addRow(new Object[]{textTable1[0], textTable1[1], textTable1[2], textTable1[3], textTable1[4], textTable1[5]});
+                model1.addRow(new Object[]{textTable1[0], textTable1[1], textTable1[2], textTable1[3], textTable1[4], textTable1[5], textTable1[6]});
                 System.out.println(textTable1[1]);
             }
         } catch (ArrayIndexOutOfBoundsException e) {

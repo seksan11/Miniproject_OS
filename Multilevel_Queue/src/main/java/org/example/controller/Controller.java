@@ -85,6 +85,8 @@ public class Controller {
         }
     }
 
+    //TODO roundRobinQueue
+
     // Method roundRobinQueue จะทำการกำหนดค่าต่างๆ การทํางานต่างๆ ในกรณีที่เข้าไปใช้งาน CPU
     public void roundRobinQueue(int clock) {
         try {
@@ -135,13 +137,14 @@ public class Controller {
                 } else if (!firstComeFirstServedQueue.isEmpty() && !roundRobinQueue.isEmpty()) {
                     if (timeRunning < 81) {//ถ้า timeRunning อยู่ระหว่าง 0-80 Process ที่อยู่ใน roundRobinQueue จะได้เข้าไปทำงานที่ CPU
                         roundRobinQueue(clock);
-                        timeRunning++;
+                        timeRunning = ++timeRunning % 100;
                     } else if (timeRunning > 80 && timeRunning < 101) { //ถ้า timeRunning อยู่ระหว่าง 81-100 Process ที่อยู่ใน firstComeFirstServedQueue จะได้เข้าไปทำงานที่ CPU
                         firstComeFirstServedQueue(clock);
-                        timeRunning++;
-                    } else if (timeRunning > 100) { //ถ้า timeRunning มีค่ามากกว่า 100 จะ reset ค่าให้เป็น 0 เพื่อทำงานในรอบถัดไป
-                        timeRunning = 0;
+                        timeRunning = ++timeRunning % 100;
                     }
+//                    } else if (timeRunning > 100) { //ถ้า timeRunning มีค่ามากกว่า 100 จะ reset ค่าให้เป็น 0 เพื่อทำงานในรอบถัดไป
+//                        timeRunning = 0;
+//                    }
                 }
             }
             System.out.println("timeRunning = " + timeRunning);
@@ -398,6 +401,7 @@ public class Controller {
             text = text + jobQueue.get(index).getBurstTime() + " ";
             text = text + jobQueue.get(index).getWaitingTime() + " ";
             text = text + jobQueue.get(index).getIoTime() + " ";
+            text = text + (jobQueue.get(index).getCountPercent() + 1) + " ";
             text = text + ",";
         }
         return text;

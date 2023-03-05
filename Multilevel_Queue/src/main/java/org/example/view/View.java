@@ -77,7 +77,10 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JTable jTableTerminate;
 
     public View() {
+<<<<<<< Updated upstream
         //TODO setDisButton
+=======
+>>>>>>> Stashed changes
         initComponents();
         jButtonAddProcess.setEnabled(false);
         jButtonEndTask.setEnabled(false);
@@ -267,7 +270,11 @@ public class View extends javax.swing.JFrame {
 
                 },
                 new String[]{
+<<<<<<< Updated upstream
                         "PID", "Status", "Arrival Time", "Burst Time", "Waiting Time", "I/O Time", "Queue"
+=======
+                        "PID", "Status", "Arrival Time", "Burst Time", "Waiting Time", "I/O Time"
+>>>>>>> Stashed changes
                 }
         ));
         jTableJobQueue.setRowHeight(25);
@@ -641,7 +648,15 @@ public class View extends javax.swing.JFrame {
         jButtonAddIoMonitor.setBorder(null);
         jButtonAddIoMonitor.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
+<<<<<<< Updated upstream
                 jButtonAddIoMonitorActionPerformed(evt);
+=======
+<<<<<<< HEAD
+                jButtonAddIoMonitorActionPerformed(evt);
+=======
+                jButtonAddIoMinitorActionPerformed(evt);
+>>>>>>> c73562c6d7fee232f19816cdc1d2d82e4cae5710
+>>>>>>> Stashed changes
             }
         });
 
@@ -651,7 +666,15 @@ public class View extends javax.swing.JFrame {
         jButtonEndIoMonitor.setBorder(null);
         jButtonEndIoMonitor.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
+<<<<<<< Updated upstream
                 jButtonEndIoMonitorActionPerformed(evt);
+=======
+<<<<<<< HEAD
+                jButtonEndIoMonitorActionPerformed(evt);
+=======
+                jButtonEndIoMinitorActionPerformed(evt);
+>>>>>>> c73562c6d7fee232f19816cdc1d2d82e4cae5710
+>>>>>>> Stashed changes
             }
         });
 
@@ -917,7 +940,15 @@ public class View extends javax.swing.JFrame {
 
     //TODO All Function
     public void setButtonAddIO() {
+<<<<<<< Updated upstream
         if (jTableCpu.getRowCount() == 0) {
+=======
+<<<<<<< HEAD
+        if (jTableCpu.getRowCount() == 0) {
+=======
+        if (jTableJobQueue.getRowCount() == 0) {
+>>>>>>> c73562c6d7fee232f19816cdc1d2d82e4cae5710
+>>>>>>> Stashed changes
             jButtonAddIoMonitor.setEnabled(false);
             jButtonAddIoUsb.setEnabled(false);
         } else {

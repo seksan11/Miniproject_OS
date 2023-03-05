@@ -15,9 +15,24 @@ public class Controller {
     int pId = 1;  //ProcessID กําหนดให้เริ่มต้นที่ ProcessID = 1
     int timeQuantum = 0; //ตัวแปลไว้เก็บค่า timeQuantum จากฝั่ง View
     int burstTime = 0; //ค่า burstTime
+<<<<<<< Updated upstream
     int resetTimeQuantum;// ตัวแปลที่ใช่ดึงค่า TimeQueam เพื่อโยนค่าให้กับตัว Process แต่ละตัวให้ทํางานตาม TimeQueam
     int waitingTime = 0; // ใช้เก็บค่า WaitingTime
     int bTFcfs = 0;  // ใช้ แทน burstTime ใน  firstComeFirstServedQueue
+=======
+<<<<<<< HEAD
+    int resetTimeQuantum;// ตัวแปลที่ใช่ดึงค่า TimeQueam เพื่อโยนค่าให้กับตัว Process แต่ละตัวให้ทํางานตาม TimeQueam
+    int waitingTime = 0; // ใช้เก็บค่า WaitingTime
+    int bTFcfs = 0;  // ใช้ แทน burstTime ใน  firstComeFirstServedQueue
+=======
+    int timeQueam = 0;// ตัวแปลที่ใช่ดึงค่า TimeQueam เพื่อโยนค่าให้กับตัว Process แต่ละตัวให้ทํางานตาม TimeQueam
+    // int tqt = 0;
+    int waitingTime = 0; // ใช้เก็บค่า Watingtime
+    int memory;
+
+    int jQ = 0;  // ใช้ แทน burstTime ใน  firstComeFirstServedQueue
+>>>>>>> c73562c6d7fee232f19816cdc1d2d82e4cae5710
+>>>>>>> Stashed changes
     int countProcess = 0; // ใช้ นับจำนวน process ทั้งหมด
     int timeRunning = 0; // ใช้ กำหนดช่วงเวลาทำงานของ process
     int ioTime = 0;  // ใช้ กำหนดช่วงเวลาทำงานของ IO
@@ -106,7 +121,15 @@ public class Controller {
                         jobQueue.get(i).setStatus(1);  //โดยถ้าเป็น 0 ก็จะเซ็ตให้ Process นั้น มีค่าสถานะเป็น Ready
                         roundRobinQueue.add(jobQueue.get(i)); //และทําการ Add Process นั้นเข้าไปรอใน roundRobinQueue เพื่อรอเข้าใช้งาน Cpu ต่อไป
                         roundRobinQueue.remove(0); //และ Remove roundRobinQueue ตําแหน่งที่ 0 ออกมาเพื่อเอา Process นั้นไปใช้งาน Cpu ต่อโดยจะไปเช็คเงื่อนไข if ด้านบนสุด
+<<<<<<< Updated upstream
                         jobQueue.get(i).setTimeQuantum(resetTimeQuantum); //และนําค่า timeQueam ที่เรานํามาจากฝั่ง View เช็ตค่าให้กับ QuantumTime นั้นไปใช้งาน
+=======
+<<<<<<< HEAD
+                        jobQueue.get(i).setTimeQuantum(resetTimeQuantum); //และนําค่า timeQueam ที่เรานํามาจากฝั่ง View เช็ตค่าให้กับ QuantumTime นั้นไปใช้งาน
+=======
+                        jobQueue.get(i).setTimeQuantum(timeQueam); //และนําค่า timeQueam ที่เรานํามาจากฝั่ง View เช็ตค่าให้กับ QuantumTime นั้นไปใช้งาน
+>>>>>>> c73562c6d7fee232f19816cdc1d2d82e4cae5710
+>>>>>>> Stashed changes
                     }
                 } else if (jobQueue.get(i).getStatus() != "Waiting") {
                     jobQueue.get(i).setStatus(1);

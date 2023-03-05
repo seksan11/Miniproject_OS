@@ -16,16 +16,11 @@ public class Model {
     private int index;
     private int turnaroundTime;
 
-    public Model(int processID, int index, int arrivalTime, int waitingTime, int ioTime, int timeQuantum, int burstTime,int turnaroundTime) {
+    public Model(int processID, int index, int arrivalTime) {
         this.processID = processID;
         this.arrivalTime = arrivalTime;
-        this.waitingTime = waitingTime;
-        this.ioTime = ioTime;
         this.countPercent = rd();
-        this.timeQuantum = timeQuantum;
-        this.burstTime = burstTime;
         this.index = index;
-        this.turnaroundTime = turnaroundTime;
     }
 
     public Model() {

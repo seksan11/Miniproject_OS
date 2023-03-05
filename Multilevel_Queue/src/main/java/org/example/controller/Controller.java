@@ -15,7 +15,7 @@ public class Controller {
     int pId = 1;  //ProcessID กําหนดให้เริ่มต้นที่ ProcessID = 1
     int timeQuantum = 0; //ตัวแปลไว้เก็บค่า timeQuantum จากฝั่ง View
     int burstTime = 0; //ค่า burstTime
-    int resetTimeQuantum;// ตัวแปลที่ใช่ดึงค่า TimeQueam เพื่อโยนค่าให้กับตัว Process แต่ละตัวให้ทํางานตาม TimeQueam
+    int resetTimeQuantum;// ตัวแปลที่ใช่ดึงค่า timeQuantum เพื่อโยนค่าให้กับตัว Process แต่ละตัวให้ทํางานตาม timeQuantum
     int waitingTime = 0; // ใช้เก็บค่า WaitingTime
     int bTFcfs = 0;  // ใช้ แทน burstTime ใน  firstComeFirstServedQueue
     int countProcess = 0; // ใช้ นับจำนวน process ทั้งหมด
@@ -30,12 +30,12 @@ public class Controller {
     ////////////////////////////////////////addProcess////////////////////////////////////////////////////////////////////////////
     //method ปุ่ม addProcess คือมี paramiter อยู่ 2 ตัว รับมาจากฝั่ง View คือตัวแปล clock timeQuantum Method นี้จะถูกนําไปเรียกใช้ในฝั่ง View
     public void addProcess(int clock, int timeQuantum) {
-        model = new Model(pId, 0, clock, 0, 0, timeQuantum, 0, 0);
+        model = new Model(pId, 0, clock);
+        resetTimeQuantum = timeQuantum;
         pId++;
         countProcess++;
         jobQueue.add(model);
         select();
-
     }
 
     //Method เลือกว่าจะให้ Process เข้าไป รอเข้าทำงานที่ FCFS or RR ด้วยการสุ่ม
@@ -44,6 +44,10 @@ public class Controller {
         for (int i = countProcess - 1; i < jobQueue.size(); i++) {
             if (jobQueue.get(i).getCountPercent() == 0) {
                 roundRobinQueue.add(model);
+                for (int j = roundRobinQueue.size() - 1; j < roundRobinQueue.size(); j++) {
+                    roundRobinQueue.get(j).setTimeQuantum(resetTimeQuantum);
+                }
+
                 System.out.println(model);
             } else {
                 firstComeFirstServedQueue.add(model);
@@ -117,10 +121,6 @@ public class Controller {
         }
     }
 
-    public void resetTimeQuantum(int qT) {
-        resetTimeQuantum = qT;
-    }
-
     public int getCountProcess() {
         return countProcess;
     }
@@ -132,23 +132,21 @@ public class Controller {
             if (!jobQueue.isEmpty()) {
                 if (firstComeFirstServedQueue.isEmpty()) {
                     roundRobinQueue(clock);
+                    timeRunning = 0;
                 } else if (roundRobinQueue.isEmpty()) {
                     firstComeFirstServedQueue(clock);
+                    timeRunning = 0;
                 } else if (!firstComeFirstServedQueue.isEmpty() && !roundRobinQueue.isEmpty()) {
-                    if (timeRunning < 81) {//ถ้า timeRunning อยู่ระหว่าง 0-80 Process ที่อยู่ใน roundRobinQueue จะได้เข้าไปทำงานที่ CPU
+                    if (timeRunning < 80) {//ถ้า timeRunning อยู่ระหว่าง 0-79 Process ที่อยู่ใน roundRobinQueue จะได้เข้าไปทำงานที่ CPU
                         roundRobinQueue(clock);
                         timeRunning = ++timeRunning % 100;
-                    } else if (timeRunning > 80 && timeRunning < 101) { //ถ้า timeRunning อยู่ระหว่าง 81-100 Process ที่อยู่ใน firstComeFirstServedQueue จะได้เข้าไปทำงานที่ CPU
+                    } else if (timeRunning > 79) { //ถ้า timeRunning อยู่ระหว่าง 80-99 Process ที่อยู่ใน firstComeFirstServedQueue จะได้เข้าไปทำงานที่ CPU
                         firstComeFirstServedQueue(clock);
                         timeRunning = ++timeRunning % 100;
                     }
-//                    } else if (timeRunning > 100) { //ถ้า timeRunning มีค่ามากกว่า 100 จะ reset ค่าให้เป็น 0 เพื่อทำงานในรอบถัดไป
-//                        timeRunning = 0;
-//                    }
                 }
             }
             System.out.println("timeRunning = " + timeRunning);
-
         } catch (java.lang.IndexOutOfBoundsException e) {
 
         }

@@ -974,7 +974,7 @@ public class View extends javax.swing.JFrame {
                 showJobUsbQueue(controller.showUsbQueue());
 
 //                controller.resetTimeQuantum(timeQuantum);
-                controller.randomRunning(clock);
+                controller.randomRunning();
                 controller.waitingTime();
                 controller.waitingTimeMonitorQueue();
                 controller.waitingTimeUsbQueue();
